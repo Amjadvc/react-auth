@@ -3,9 +3,10 @@ import * as z from 'zod';
 /* -------------------------------------------------
  * Step 1
  * ------------------------------------------------- */
+
 const step1Fields = {
   fullname: z.string().min(3, 'Full Name is required'),
-  email: z.string().email('Invalid email'),
+  email: z.email('Invalid email'),
 };
 
 export const step1Schema = z.object(step1Fields);
@@ -41,8 +42,6 @@ const passwordSchema = z
 
 const step2Fields = {
   password: passwordSchema,
-  // rePassword: z.string().min(8, 'Confirm your password'),
-  // rePassword: z.string(),
   rePassword: z.string().min(1, 'Please confirm your password'),
 };
 

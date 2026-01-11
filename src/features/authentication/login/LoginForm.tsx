@@ -15,10 +15,17 @@ import { cn } from '@/lib/utils';
 import { startTransition, useActionState } from 'react';
 import { loginAction } from '@/features/authentication/login/login.actions';
 import type { LoginState } from '@/features/authentication/login/login.actions';
+import { Spinner } from '@/components/ui/spinner';
 
 const loginFormSchema = z.object({
   email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z
+    .string()
+    .min(8, 'Password must be at least 8 characters')
+    .regex(
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/,
+      'Password must include uppercase, lowercase, number, and special character',
+    ),
 });
 
 type FormValues = z.infer<typeof loginFormSchema>;
@@ -73,6 +80,7 @@ function LoginForm() {
                   aria-invalid={fieldState.invalid}
                   className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
                   type="email"
+                  autoComplete="username"
                   placeholder="Example@email.com"
                 />
                 {fieldState.invalid && (
@@ -104,6 +112,7 @@ function LoginForm() {
                   aria-invalid={fieldState.invalid}
                   className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
                   type="password"
+                  autoComplete="current-password"
                   placeholder="At least 8 characters"
                 />
                 {fieldState.invalid && (
@@ -114,12 +123,13 @@ function LoginForm() {
           />
         </FieldGroup>
       </FieldSet>
+
       <Field orientation="vertical" className="mt-8">
         <Button
           type="submit"
           className="h-12 bg-ButtonBg text-xl font-normal text-white hover:bg-ButtonHover"
         >
-          {isPending ? 'Signing in...' : 'Sign in'}
+          {isPending ? <Spinner className="!size-6" /> : 'Sign in'}
         </Button>
       </Field>
 
@@ -127,7 +137,6 @@ function LoginForm() {
         <p className="mt-4 text-sm text-red-500">{state.message}</p>
       )}
 
-      {/* 🟢 رسالة النجاح */}
       {state.status === 'success' && (
         <p className="mt-4 text-sm text-green-500">Login successful 🎉</p>
       )}

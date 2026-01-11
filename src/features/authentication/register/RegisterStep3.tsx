@@ -1,4 +1,4 @@
-import { startTransition, useActionState, useState } from 'react';
+import { startTransition, useActionState, useEffect, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
 import {
@@ -19,12 +19,14 @@ import {
 import { Calendar } from '../../../components/ui/calendar';
 import { CalendarIcon } from 'lucide-react';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import type { RegisterFormValues } from '@/schemas/register.schema';
+import type { RegisterFormValues } from '@/features/authentication/register/register.schema';
 import { cn } from '@/lib/utils';
 import {
   registerAction,
   type RegisterState,
 } from '@/features/authentication/register/register.action';
+import { Spinner } from '@/components/ui/spinner';
+import { clearRegister } from './register.storage';
 
 function formatDate(date: Date | undefined) {
   if (!date) return '';
@@ -71,6 +73,12 @@ function RegisterStep3() {
 
     startTransition(() => action(formData));
   };
+
+  useEffect(() => {
+    if (state.status === 'success') {
+      clearRegister();
+    }
+  }, [state.status]);
 
   return (
     <>
@@ -210,7 +218,7 @@ function RegisterStep3() {
           type="button"
           onClick={handleSubmit}
         >
-          {isPending ? 'Signing up...' : 'Sign up'}
+          {isPending ? <Spinner className="!size-6" /> : 'Sign up'}
         </Button>
       </div>
       {state.status === 'error' && (

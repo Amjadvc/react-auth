@@ -9,7 +9,7 @@ import {
 } from '../../../components/ui/field';
 import { Input } from '../../../components/ui/input';
 import { Controller, type UseFormReturn } from 'react-hook-form';
-import { type RegisterFormValues } from '@/schemas/register.schema';
+import { type RegisterFormValues } from '@/features/authentication/register/register.schema';
 import { cn } from '@/lib/utils';
 import { useEffect } from 'react';
 
@@ -21,14 +21,11 @@ function RegisterStep2() {
   }>();
 
   const handleNext = async () => {
-    // Trigger validation for password fields
     const valid = await form.trigger(['password', 'rePassword']);
 
-    // Get current values to check if they match
     const password = form.getValues('password');
     const rePassword = form.getValues('rePassword');
 
-    // Manual check (optional, but good for debugging)
     if (password !== rePassword) {
       form.setError('rePassword', {
         type: 'manual',
@@ -42,7 +39,7 @@ function RegisterStep2() {
     }
   };
 
-  // Add this useEffect for real-time password validation
+  // useEffect for real-time password validation
   useEffect(() => {
     const subscription = form.watch((_value, { name }) => {
       if (name === 'password' || name === 'rePassword') {
@@ -90,12 +87,12 @@ function RegisterStep2() {
                   {...field}
                   id="password"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="At least 8 characters"
                   aria-invalid={fieldState.invalid}
                   className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
                   onChange={(e) => {
                     field.onChange(e);
-                    // Re-validate rePassword when password changes
                     if (form.getValues('rePassword')) {
                       form.trigger('rePassword');
                     }
@@ -127,6 +124,7 @@ function RegisterStep2() {
                   {...field}
                   id="rePassword"
                   type="password"
+                  autoComplete="new-password"
                   placeholder="Re-enter your password"
                   aria-invalid={fieldState.invalid}
                   className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"

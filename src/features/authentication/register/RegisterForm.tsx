@@ -1,10 +1,11 @@
 import {
   registerSchema,
   type RegisterFormValues,
-} from '@/schemas/register.schema';
+} from '@/features/authentication/register/register.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { Outlet } from 'react-router-dom';
+import { useRegisterSession } from './hooks/useRegisterSession';
 
 function RegisterForm() {
   const form = useForm<RegisterFormValues>({
@@ -20,6 +21,9 @@ function RegisterForm() {
       gender: undefined,
     },
   });
+
+  //session storage
+  useRegisterSession(form);
 
   return (
     <form className="w-full">

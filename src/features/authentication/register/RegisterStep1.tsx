@@ -8,7 +8,7 @@ import {
   FieldSet,
 } from '../../../components/ui/field';
 import { Input } from '../../../components/ui/input';
-import type { RegisterFormValues } from '@/schemas/register.schema';
+import type { RegisterFormValues } from '@/features/authentication/register/register.schema';
 import { Controller, type UseFormReturn } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 
