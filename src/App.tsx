@@ -8,13 +8,16 @@ import RegisterStep1 from './features/authentication/register/RegisterStep1';
 import LandingPage from './pages/LandingPage';
 import HomePage from './pages/HomePage';
 import AuthLayout from './components/ui/AuthLayout';
+import ProtectedRoute from './features/authentication/ProtectedRoute';
+import RootRedirect from './features/authentication/RootRedirect';
 
 export default function App() {
   return (
     <BrowserRouter>
       <Routes>
         {/* Landing / marketing pages */}
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<RootRedirect />} />
+        <Route path="landing" element={<LandingPage />} />
 
         {/* Auth pages */}
         <Route element={<AuthLayout />}>
@@ -29,7 +32,14 @@ export default function App() {
         </Route>
 
         {/* Protected / Home pages */}
-        <Route path="home" element={<HomePage />} />
+        <Route
+          path="home"
+          element={
+            <ProtectedRoute>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route path="*" element={<PageNotFound />} />
       </Routes>

@@ -1,3 +1,4 @@
+import { loginMock } from '@/services/auth';
 import { loginApi } from '@/services/loginApi';
 
 export type LoginState =
@@ -16,6 +17,7 @@ export async function loginAction(
 
     const data = await loginApi({ email, password });
 
+    loginMock();
     return { status: 'success', data };
   } catch (error: any) {
     return {

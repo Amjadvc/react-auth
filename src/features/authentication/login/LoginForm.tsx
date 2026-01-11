@@ -12,10 +12,11 @@ import { Input } from '../../../components/ui/input';
 import { Button } from '../../../components/ui/button';
 import { cn } from '@/lib/utils';
 
-import { startTransition, useActionState } from 'react';
+import { startTransition, useActionState, useEffect } from 'react';
 import { loginAction } from '@/features/authentication/login/login.actions';
 import type { LoginState } from '@/features/authentication/login/login.actions';
 import { Spinner } from '@/components/ui/spinner';
+import { useNavigate } from 'react-router-dom';
 
 const loginFormSchema = z.object({
   email: z.string().email('Invalid email address'),
@@ -31,10 +32,17 @@ const loginFormSchema = z.object({
 type FormValues = z.infer<typeof loginFormSchema>;
 
 function LoginForm() {
+  const navigate = useNavigate();
   const [state, action, isPending] = useActionState<LoginState, FormData>(
     loginAction,
     { status: 'idle' },
   );
+
+  useEffect(() => {
+    if (state.status === 'success') {
+      navigate('/home');
+    }
+  }, [state.status, navigate]);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(loginFormSchema),
@@ -76,9 +84,10 @@ function LoginForm() {
                 </FieldLabel>
                 <Input
                   {...field}
+                  className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
                   id="email"
                   aria-invalid={fieldState.invalid}
-                  className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
+                  disabled={isPending}
                   type="email"
                   autoComplete="username"
                   placeholder="Example@email.com"
@@ -108,9 +117,10 @@ function LoginForm() {
 
                 <Input
                   {...field}
+                  className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
                   id="password"
                   aria-invalid={fieldState.invalid}
-                  className="h-11 border border-InputStrok bg-InputFill placeholder-InputPlaceholder placeholder:text-base placeholder:font-normal placeholder:tracking-wide"
+                  disabled={isPending}
                   type="password"
                   autoComplete="current-password"
                   placeholder="At least 8 characters"
@@ -127,6 +137,7 @@ function LoginForm() {
       <Field orientation="vertical" className="mt-8">
         <Button
           type="submit"
+          disabled={isPending}
           className="h-12 bg-ButtonBg text-xl font-normal text-white hover:bg-ButtonHover"
         >
           {isPending ? <Spinner className="!size-6" /> : 'Sign in'}

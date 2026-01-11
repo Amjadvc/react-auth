@@ -1,3 +1,4 @@
+import { loginMock } from '@/services/auth';
 import { registerApi } from '@/services/registerApi';
 
 // src/actions/auth.actions.ts
@@ -21,6 +22,8 @@ export async function registerAction(
       dateOfBirth: formData.get('date') as string, // make sure your Step3 DOB value is a string like "7-10-1994"
       gender: formData.get('gender') as string,
     });
+
+    loginMock();
 
     return { status: 'success', data };
   } catch (error: any) {

@@ -1,5 +1,5 @@
 import { startTransition, useActionState, useEffect, useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import { Button } from '../../../components/ui/button';
 import {
   Field,
@@ -42,6 +42,7 @@ function isValidDate(date: Date | undefined) {
 }
 
 function RegisterStep3() {
+  const navigate = useNavigate();
   const { form } = useOutletContext<{
     form: UseFormReturn<RegisterFormValues>;
   }>();
@@ -77,12 +78,13 @@ function RegisterStep3() {
   useEffect(() => {
     if (state.status === 'success') {
       clearRegister();
+      navigate('/home');
     }
-  }, [state.status]);
+  }, [state.status, navigate]);
 
   return (
     <>
-      <FieldSet>
+      <FieldSet disabled={isPending}>
         <FieldGroup className="gap-6">
           {/* ====================== Date of Birth ====================== */}
           <Controller
@@ -216,6 +218,7 @@ function RegisterStep3() {
         <Button
           className="h-12 w-full bg-ButtonBg text-xl font-normal text-white hover:bg-ButtonHover"
           type="button"
+          disabled={isPending}
           onClick={handleSubmit}
         >
           {isPending ? <Spinner className="!size-6" /> : 'Sign up'}
