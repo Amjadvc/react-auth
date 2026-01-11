@@ -15,11 +15,9 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Landing / marketing pages */}
         <Route path="/" element={<RootRedirect />} />
         <Route path="landing" element={<LandingPage />} />
 
-        {/* Auth pages */}
         <Route element={<AuthLayout />}>
           <Route path="login" element={<Login />} />
 
@@ -31,7 +29,6 @@ export default function App() {
           </Route>
         </Route>
 
-        {/* Protected / Home pages */}
         <Route
           path="home"
           element={

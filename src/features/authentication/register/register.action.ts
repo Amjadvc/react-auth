@@ -1,8 +1,6 @@
 import { loginMock } from '@/services/auth';
 import { registerApi } from '@/services/registerApi';
 
-// src/actions/auth.actions.ts
-
 export type RegisterState =
   | { status: 'idle' }
   | { status: 'loading' }

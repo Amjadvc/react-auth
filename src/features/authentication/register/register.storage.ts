@@ -1,4 +1,3 @@
-// register.storage.ts
 import type { RegisterFormValues } from './register.schema';
 
 const STORAGE_KEY = 'register-form';
